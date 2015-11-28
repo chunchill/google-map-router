@@ -45,13 +45,10 @@ function RouteBrush () {
     //自定义地图样式
 
 
-    this.setMap = function(mapId) {
+    this.setMap = function(mapId,center) {
         map = new window.google.maps.Map(document.getElementById(mapId), {
             zoom: 14,
-            center: {
-                lat: 31.113962,
-                lng: 121.454786
-            },
+            center: center,
             mapTypeControlOptions: {
                 mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
             }
