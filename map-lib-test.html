@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple styled maps</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="route-brush.js"></script>
+    <script type="text/javascript" src="http://maps.google.cn/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="route-brush.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></head>
+<style>
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    height: 100%;
+}
+</style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="text/javascript">
+    var routeBrush = new RouteBrush();
+    routeBrush.setMap("map");
+    routeBrush.addMarker(31.113962, 121.454786, 'marker1', 1);
+    routeBrush.addMarker(31.225276, 121.439924, 'marker2', 2);
+    routeBrush.addMarker(31.205585, 121.408958, 'marker3', 3);
+    routeBrush.addMarker(31.013962, 121.454786, 'marker4', 1);
+    routeBrush.addMarker(31.023962, 121.474786, 'marker5', 2);
+    routeBrush.addMarker(31.053962, 121.404786, 'marker6', 3);
+
+    //自定义信息窗口
+    var contentString = '<div>' +
+        '<h3><b>配送中转仓</b></h3>' +
+        '<p align="left"><i class="fa fa-clock-o"></i> 计划到达时间: 2015-11-11 9:00AM<br>' +
+        '<i class="fa fa-clock-o"></i> 计划离开时间: 2015-11-11 10:00AM<br>' +
+        '<i class="fa fa-truck"></i> 货量: 30KG</p>' +
+        '</div>';
+    routeBrush.setMarkerContentInfo('marker1', contentString);
+
+    //画一条路线出来
+    var origin = {
+        lat: 31.113962,
+        lng: 121.454786
+    }; //出发地
+    var destination = {
+        lat: 31.113962,
+        lng: 121.454786
+    }; //返回地
+    var waypoints = [{
+            location: "31.225276,121.439924",
+            stopover: true
+        }, //必须途径的地点集合
+        {
+            location: "31.205585,121.408958",
+            stopover: true
+        }
+    ];
+    routeBrush.drawOnePolyLine('#ff9804', 0.8, 5, origin, destination, waypoints);
+
+    //再画一条路线
+    //画一条路线出来
+    var origin2 = {
+        lat: 31.013962,
+        lng: 121.454786
+    }; //出发地
+    var destination2 = {
+        lat: 31.013962,
+        lng: 121.454786
+    }; //返回地
+    var waypoints2 = [{
+        location: "31.023962,121.474786",
+        stopover: true
+    }, {
+        location: "31.053962,121.404786",
+        stopover: true
+    }];
+    routeBrush.drawOnePolyLine('#707070', 0.8, 5, origin2, destination2, waypoints2);
+    </script>
+</body>
+
+</html>

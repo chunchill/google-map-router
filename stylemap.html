@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple styled maps</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+
+<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+#map {
+	height: 100%;
+}
+</style>
+<link href="themes/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="map"></div>
+<script>
+function initMap() {
+	
+  //自定义地图样式
+  var customMapType = new google.maps.StyledMapType([
+      {
+        stylers: [
+          {hue: '#84969d'},
+          {visibility: 'simplified'},
+          {gamma: 1.2},
+          {weight: 0.7}
+        ]
+      },
+       {
+                elementType: 'labels',
+                stylers: [{hue: '#84969d'},
+				{visibility: 'simplified'}]
+            },
+	  	{
+        featureType: 'road.highway',
+        elementType: 'geometry',
+        stylers: [
+          {hue: '#84969d'},
+          
+		  
+          {lightness: 5}
+        ]
+      }, 
+      {
+        featureType: 'water',
+        stylers: [{color: '#84969d'}]
+      }
+    ], {
+      name: 'iTMS视图'
+  });
+  var customMapTypeId = 'custom_style';
+  //自定义地图样式
+  
+  
+  
+  //自定义轨迹线样式，地图中可能出现多条路线，每条路线的颜色需要不同
+  var poly = new google.maps.Polyline({
+    strokeColor: '#ff9804',
+    strokeOpacity: 0.8,
+    strokeWeight: 5
+    });
+	
+  var poly2 = new google.maps.Polyline({
+    strokeColor: '#707070',
+    strokeOpacity: 0.8,
+    strokeWeight: 5
+    });
+	
+  //自定义轨迹线样式，地图中可能出现多条路线，每条路线的颜色需要不同
+  
+ //初始化地图，Zoom和Center参数需要根据应用动态传入
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 14,
+    center: {lat: 31.113962, lng: 121.454786},  
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
+    }
+  });
+  //初始化地图，Zoom和Center参数需要根据应用动态
+  
+  
+  //自定义marker
+  var pin1 = 'marker_sprite1.png';
+  var pin2 = 'marker_sprite2.png';
+  var pin3 = 'marker_sprite3.png';
+  var pin4 = 'marker_sprite4.png';
+  
+  var myLatlng1 = new google.maps.LatLng(31.113962,121.454786);
+  var myLatlng2 = new google.maps.LatLng(31.225276,121.439924);
+  var myLatlng3 = new google.maps.LatLng(31.205585,121.408958);
+  var myLatlng4 = new google.maps.LatLng(31.013962,121.454786);
+  var myLatlng5 = new google.maps.LatLng(31.023962,121.474786);
+  var myLatlng6 = new google.maps.LatLng(31.053962,121.404786);
+  
+  
+  var MARKER1 = new google.maps.Marker({
+                                  position: myLatlng1,
+                                  map: map,
+								      icon: pin1});
+  var MARKER2 = new google.maps.Marker({
+                                  position: myLatlng2,
+                                  map: map,
+								      icon: pin2});
+									  
+  var MARKER3 = new google.maps.Marker({
+                                  position: myLatlng3,
+                                  map: map,
+								      icon: pin3});
+									  
+  var MARKER4 = new google.maps.Marker({
+                                  position: myLatlng4,
+                                  map: map,
+								      icon: pin1});
+   var MARKER5 = new google.maps.Marker({
+                                  position: myLatlng5,
+                                  map: map,
+								      icon: pin2});
+									  
+     var MARKER6 = new google.maps.Marker({
+                                  position: myLatlng6,
+                                  map: map,
+								      icon: pin3});									  									  
+    //自定义marker
+	
+	//自定义信息窗口
+ var contentString = '<div>'+
+	'<h3><b>配送中转仓</b></h3>' +
+    '<p align="left"><i class="fa fa-clock-o"></i> 计划到达时间: 2015-11-11 9:00AM<br>'+
+	'<i class="fa fa-clock-o"></i> 计划离开时间: 2015-11-11 10:00AM<br>'+
+	'<i class="fa fa-truck"></i> 货量: 30KG</p>'+    
+    '</div>';
+ 
+var infowindow = new google.maps.InfoWindow({
+    content: contentString});
+ 
+ 
+ 
+  google.maps.event.addListener(MARKER1, 'click', function() {
+  infowindow.open(map,MARKER1);
+});
+	//自定义信息窗口
+	 
+  map.mapTypes.set(customMapTypeId, customMapType);
+  map.setMapTypeId(customMapTypeId);
+  poly.setMap(map);
+  poly2.setMap(map);
+  
+  //自定义路线规划作图
+  var directionsDisplay = new google.maps.DirectionsRenderer({
+	  polylineOptions: poly,
+	  suppressMarkers: true, 
+	  });
+ 
+  var directionsService = new google.maps.DirectionsService;
+  //自定义路线规划作图
+
+  //自定义路线规划作图
+  var directionsDisplay2 = new google.maps.DirectionsRenderer({
+	  polylineOptions: poly2,
+	  suppressMarkers: true, 
+	  });
+ 
+  var directionsService2 = new google.maps.DirectionsService;
+
+  //自定义路线规划作图
+  directionsDisplay.setMap(map);
+  directionsDisplay2.setMap(map);
+  calculateAndDisplayRoute(directionsService, directionsDisplay);
+  calculateAndDisplayRoute2(directionsService2, directionsDisplay2);
+}
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+  
+  directionsService.route({
+    origin: {lat: 31.113962, lng: 121.454786},  //出发地
+    destination: {lat: 31.113962, lng: 121.454786},  //返回地
+	waypoints: [       
+                {location: "31.225276,121.439924", stopover: true},  //必须途径的地点集合
+                {location: "31.205585,121.408958", stopover: true}
+                ],     
+    optimizeWaypoints: true,
+    travelMode: 'DRIVING'
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+
+function calculateAndDisplayRoute2(directionsService, directionsDisplay) {
+  
+  directionsService.route({
+    origin: {lat: 31.013962, lng: 121.454786},  // Haight.
+    destination: {lat: 31.013962, lng: 121.454786},  // Ocean Beach.
+	waypoints: [       
+                {location: "31.023962,121.474786", stopover: true},  
+                {location: "31.053962,121.404786", stopover: true}
+                ],     
+    optimizeWaypoints: true,
+    travelMode: 'DRIVING'
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+
+</script> 
+<script src="http://maps.google.cn/maps/api/js?callback=initMap"
+        async defer></script>
+</body>
+</html>
